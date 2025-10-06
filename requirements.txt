@@ -1,7 +1,20 @@
+# Core
 streamlit==1.30.0
-easyocr
 pillow
 numpy
 pandas
-fuzzywuzzy[speedup]
 python-dotenv
+requests
+
+# OCR
+easyocr
+
+# Fuzzy matching for allergen detection
+rapidfuzz      # ✅ better & faster than fuzzywuzzy
+
+# Barcode scanning
+opencv-python-headless
+pyzbar
+
+# Translation (optional)
+googletrans==4.0.0-rc1
