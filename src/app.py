@@ -47,29 +47,37 @@ if mode == "Upload Image":
     uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
-        # Show uploaded image directly
-        st.image(uploaded_file, caption="Uploaded Label", use_container_width=True)
+        # ✅ Read image as bytes and display
+        image_bytes = uploaded_file.getvalue()
+        st.image(image_bytes, caption="Uploaded Label", use_container_width=True)
 
-        # Save a temporary file for OCR
+        # ✅ Save to a temporary file for OCR
         with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp_file:
-            tmp_file.write(uploaded_file.getvalue())
+            tmp_file.write(image_bytes)
             temp_path = tmp_file.name
 
         st.subheader("🔎 Extracting Text from Label...")
         text = extract_text(temp_path)
         st.text_area("📝 Extracted Text", text, height=150)
 
-        # Optional translation
-        if TRANSLATION_AVAILABLE and st.checkbox("🌎 Translate to English"):
-            try:
-                translated = translator.translate(text, src="auto", dest="en").text
-                st.text_area("🌎 Translated to English", translated, height=150)
-                text_for_detection = translated
-            except Exception as e:
-                st.warning(f"Translation failed: {e}")
-                text_for_detection = text
+        st.subheader("🚨 Allergen Detection")
+        allergens = detect_allergens(text)
+        if allergens:
+            st.error(f"⚠️ Allergens detected: {', '.join(allergens)}")
+            st.subheader("🌱 Suggested Alternatives")
+            suggestions = suggest_alternatives(allergens)
+            for allergen, alternatives in suggestions.items():
+                st.markdown(f"**{allergen.capitalize()}** → {', '.join(alternatives)}")
         else:
-            text_for_detection = text
+            st.success("🎉 No common allergens detected!")
+
+        # Save for chatbot
+        st.session_state.product_data = {
+            "name": "Uploaded Product",
+            "ingredients": text,
+            "nutriments": {}
+        }
+
 
         # Detect allergens
         st.subheader("🚨 Allergen Detection")
