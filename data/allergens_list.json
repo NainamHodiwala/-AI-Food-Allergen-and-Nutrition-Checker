@@ -1,0 +1,8 @@
+{
+  "peanut": ["almond butter", "sunflower seed butter"],
+  "milk": ["soy milk", "almond milk", "oat milk"],
+  "soy": ["coconut milk", "rice milk"],
+  "egg": ["chia egg", "flax egg"],
+  "gluten": ["rice flour", "almond flour", "corn flour"],
+  "shellfish": ["tofu", "tempeh"]
+}

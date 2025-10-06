@@ -1,0 +1,7 @@
+streamlit==1.30.0
+easyocr
+pillow
+numpy
+pandas
+fuzzywuzzy[speedup]
+python-dotenv
